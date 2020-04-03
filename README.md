@@ -24,8 +24,8 @@ The examples shown below have been selected to illustrate the differences betwee
 *The images below are as follows:- image after enhanced processing, image after processing by a well-known commercial software application, image after processing by a new proprietary method developed by the author, image after processing by an on line facility which uses a neural algorithm of artistic style.*  
 
 ![Second Composite of Flowers Image: Inputs and Outputs](Documents/Images/Flowers2_composite.jpg?raw=true)
-#   
-#   
+#      
+#      
 *A second implementation of enhanced processing has been provided in the folder 'Main_L_Alpha_Beta'. This utilises an alternative colour space representation developed by Ruderman et al.  This colour space was integral to the original colour transfer method as proposed by Reinhard et al.*
-#   
-*Feedback would be welcome.  Of particular interest would be examples which highlight the differences between standard processing, the two versions of enhanced processing and Photoshop processing.*
+#     
+_Initial indications are that the L\*a\*b implementation outperforms the L-alpha-beta implementation on image pairs that are of good quality and well matched but L-alpha-beta may show greater resilience in other cases.  Feedback would be welcome.  Of particular interest would be examples which highlight the differences between standard processing, the two versions of enhanced processing and Photoshop processing._
