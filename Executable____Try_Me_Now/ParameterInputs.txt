@@ -1,9 +1,9 @@
-1.0       // p1=1.0 for cross covariance processing,  0.0 for independent channel processing                                  [default 1.0]
-1.0       // p2=1.0 to keep target image shading, 0.0 to adopt palette image shading. 			 	[default 1.0]
-1.0       // p3=1.0 to scale rather than clip, 0.0 to saturate data at range limits.					[default 1.0]
-2.0       // p4=number of processing iterations.								[default 2.0]
-100.0    // p5=100.0 for full colour image, 0.0 for grayscale image, otherwise intermediate Tint.                              [default 100]
-0.0       // p6=Percent of Base image colour to retain in the processed image.				             [default 0.0]
+0.5      // p1=1.0 for full cross covariance processing,  0.0 for independent channel processing,  intermediate otherwise  See below.      [default 0.5]
+1.0       // p2=1.0 to keep target image shading, 0.0 to adopt palette image shading. 			 	  		[default 1.0]
+1.0       // p3=1.0 to scale rather than clip, 0.0 to saturate data at range limits.							[default 1.0]
+2.0       // p4=number of processing iterations.										[default 2.0]
+100.0    // p5=100.0 for full colour image, 0.0 for grayscale image, otherwise intermediate Tint.                             			[default 100]
+0.0       // p6=Percent of Base image colour to retain in the processed image.				             			[default 0.0]
 // ***********************************************************************************************
 // This file is used to specify the values for processing options p1 to p6.
 //
@@ -32,9 +32,32 @@
 // Values outside the range 0.0-100.0 are permissible!
 
 ** Processing Precedence
-p6 is implemented first then p5.
+// p6 is implemented first then p5.
 
-**Processing Set up
+**Parameter p1
+// Set to 0.0 no crossvariance processing.
+// Set to 1.0 for unrestricted crosscovariance processing.
+// Set to an intermediate value to impose a maximum
+// limit on the degree of crosscovariance processing
+// as follows.
+//
+// Cross correlation matching is performed by operations of the
+// form.
+// Channel_a = W1*Channel_a + W2*Channel_b
+// Channel_b = W1*Channel_b + W2*Channel_a
+// as determined by the value of CrossCovarianceLimit.
+//
+// If CrossCovarianceLimit = 0, W2=0 and no cross correlation
+// matching is performed.
+// If CrossCovarianceLimit > 0, W2 is clipped if necessary so
+// that it cannot lie outside the range
+// -CrossCovarianceLimit*W1 to +CrossCovarianceLimit*W1.
+// This mechanism may be used to guard against an overly large
+// correction term.
+// Typically CrossCovarianceLimit might be set to 0.5
+// (for a maximum modification corresponding to 50%).
+
+**Processing Set Up
 // To run double click 'TJColourTranser.exe'
 // This file must be in the same directory as the executable 'TJColourTranser.exe'
 // The source and traget file must be in the same directory as the executable.
@@ -47,5 +70,3 @@ p6 is implemented first then p5.
 // libopencv_highgui2410.dll
 // libopencv_imgproc2410.dll
 // libstdc++-6.dll
-
-
