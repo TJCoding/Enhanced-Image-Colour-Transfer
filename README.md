@@ -31,8 +31,3 @@ The examples shown below have been selected to illustrate the differences betwee
 _Initial indications are that, for many image pairs, the L\*a\*b and the L-alpha-beta implementations achieve similar quality images, even though there may be slight differences.  However, some instances have been found where the L\*a\*b implementation produces a poor quality image but the L-alpha-beta implementation does not. This is further discussed in the file '[Enhanced Image-Colour- Transfer --- LAlphaBeta](Documents/Enhanced%20Image-Colour-%20Transfer%20---%20LAlphaBeta.pdf)' in the Documents folder.  Feedback would be welcome.  Of particular interest would be examples which highlight the differences between standard processing, the two versions of enhanced processing and Photoshop processing._
 
 A new implementation is under development _Further Enhanced Image Colour Transfer_ and this will be based upon L-alpha-beta processing.  
-#  
-# 
-============================================================================== 
-# Further Enhanced Image-Colour-Transfer
-==============================================================================
