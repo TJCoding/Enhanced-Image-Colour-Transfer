@@ -53,7 +53,8 @@ The following images illustrate the processing describe here.
 
 ![Composite of Flowers Image: Inputs and Outputs](Documents/Images/Flowers3_composite.jpg?raw=true)
 
-An executable for the 'Further Enhanced-Image-Colour-Transfer is available here https://github.com/TJCoding/Image-Colour-Transfer-Processing-Executable
+An executable for the 'Further Enhanced-Image-Colour-Transfer' processing  is available here.
+https://github.com/TJCoding/Image-Colour-Transfer-Processing-Executable
 
 
 
