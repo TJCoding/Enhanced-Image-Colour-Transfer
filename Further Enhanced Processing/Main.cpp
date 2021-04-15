@@ -158,9 +158,6 @@ int main(int argc, char *argv[])
     savedtf.release(); // Release storage.
     cv::Mat result;
 
-    cv::Scalar tmean, tdev;
-    cv::meanStdDev(targetf, tmean, tdev);
-
     targetf.convertTo(result, CV_8UC3, 255.f);
     // Display and save the final image.
     cv::imshow("processed image",result);
