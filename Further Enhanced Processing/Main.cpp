@@ -3,7 +3,7 @@
 //    See 'main' routine for further details.
 //
 // Copyright © Terry Johnson, January 2020
-// Revised 26/10/2020 (Version 4)
+// Revised 27/05/2021 (Version 5)
 // https://github.com/TJCoding
 
 #include <opencv2/highgui/highgui.hpp>
@@ -135,8 +135,6 @@ int main(int argc, char *argv[])
     target.convertTo(targetf, CV_32FC3, 1.0/255.f);
     source.convertTo(sourcef, CV_32FC3, 1.0/255.f);
     cv::Mat savedtf=targetf.clone();
-    source.release(); // Release storage.
-    target.release(); // Release storage.
 
     // Implement augmented "Reinhard Processing" in
     // L-alpha-beta colour space.
@@ -155,7 +153,6 @@ int main(int argc, char *argv[])
                             PercentModified/100.0);
 
     //  Convert the processed image to integer format.
-    savedtf.release(); // Release storage.
     cv::Mat result;
 
     targetf.convertTo(result, CV_8UC3, 255.f);
@@ -197,8 +194,6 @@ cv::Mat CoreProcessing(cv::Mat targetf, cv::Mat sourcef,
     cv::meanStdDev(sourcef, smean, sdev);
     cv::split(targetf,Lab);
     cv::split(sourcef,sLab);
-    sourcef.release();//release memory.
-    targetf.release();//release memory.
 
     Lab[0]=(Lab[0]-tmean[0])/tdev[0];
     Lab[1]=(Lab[1]-tmean[1])/tdev[1];
@@ -212,7 +207,7 @@ cv::Mat CoreProcessing(cv::Mat targetf, cv::Mat sourcef,
     // Implement first phase of reshaping for the colour channels
     // when one or more iteration is specified.
     int jcount=ReshapingIterations;
-    while (jcount>ceil(ReshapingIterations/2))
+    while (jcount>ceil((ReshapingIterations+1)/2))
     {
          Lab[1]=ChannelCondition(Lab[1],sLab[1]);
          Lab[2]=ChannelCondition(Lab[2],sLab[2]);
@@ -482,7 +477,6 @@ cv::Mat SaturationProcessing(cv::Mat targetf, cv::Mat savedtf,
         // with the definition used for the HSV colour space.
         cv::cvtColor(targetf,targetf,CV_BGR2HSV);
         cv::cvtColor(savedtf,temp,CV_BGR2HSV);
-        savedtf.release(); //Release storage
         cv::split(targetf,Hsv);
         cv::split(temp,tmpHsv);
 
@@ -521,8 +515,6 @@ cv::Mat SaturationProcessing(cv::Mat targetf, cv::Mat savedtf,
         temp=cv::Mat::zeros(targetf.rows, targetf.cols, CV_32FC1);
         cv::add(temp,tmpHsv[1],temp,mask);
         cv::add(temp,Hsv[1],tmpHsv[1],(1-mask));
-        temp.release();   //release storage
-        mask.release();   //release storage
 
         // Now match the mean and standard deviation of the
         // saturation channel for the processed image channel
@@ -561,14 +553,12 @@ cv::Mat FullShading(cv::Mat targetf, cv::Mat savedtf, cv::Mat sourcef,
          cv::cvtColor(savedtf,greyt,CV_BGR2GRAY);
          cv::cvtColor(targetf,greyp,CV_BGR2GRAY);
          sourcef.copyTo(greys);// Already converted.
-         savedtf.release();// release storage.
 
          // Standardise the greyshade images
          // for the source and target.
          cv::meanStdDev(greys, smean, sdev);
          cv::meanStdDev(greyt, tmean, tdev);
          greyt=(greyt-tmean[0])/tdev[0];
-         greys.release();// release storage.
 
          // Rescale the previously standardised grey shade
          // target image so that the means and standard
@@ -583,6 +573,10 @@ cv::Mat FullShading(cv::Mat targetf, cv::Mat savedtf, cv::Mat sourcef,
          //
          cv::Mat min_mat = cv::Mat(greyp.size(), CV_32FC1,1/255.0);
 	     cv::max(greyp, min_mat, greyp); // Guard against zero divide;
+	     // Guard against negative values;
+	     cv::max(greyt, cv::Mat(greyt.size(), CV_32FC1, 0.0), greyt);
+
+
 
          cv::split(targetf,chans);
          cv::divide(chans[0],greyp,chans[0]);
@@ -617,7 +611,6 @@ cv::Mat FinalAdjustment(cv::Mat targetf,cv::Mat savedtf,
          BGR[1]=TintVal*BGR[1]+(1.0-TintVal)*grey;
          BGR[2]=TintVal*BGR[2]+(1.0-TintVal)*grey;
          cv::merge(BGR,3,targetf);
-         grey.release();// Release storage.
      }
 
     // If 100% image modification not specified then
